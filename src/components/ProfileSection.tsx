@@ -1,11 +1,11 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { MdOutlineFileDownload } from "react-icons/md";
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 interface ProfileSectionProps {
   name: string;
@@ -14,11 +14,15 @@ interface ProfileSectionProps {
   avatar?: string;
 }
 
-const ProfileSection = ({ name, title, bio, avatar }: ProfileSectionProps) => {
-  const getCurrentDay = () => {
+const ProfileSection = ({ name, bio, avatar }: ProfileSectionProps) => {
+  const [currentDay, setCurrentDay] = useState<string>("");
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
     const date = new Date();
-    return date.toLocaleDateString("en-US", { weekday: "long" });
-  };
+    setCurrentDay(date.toLocaleDateString("en-US", { weekday: "long" }));
+  }, []);
 
   const downloadResume = () => {
     const link = document.createElement("a");
@@ -65,7 +69,9 @@ const ProfileSection = ({ name, title, bio, avatar }: ProfileSectionProps) => {
           <h1 className="text-2xl font-bold text-white mb-1">
             Howdy, {name.split(" ")[0]} here
           </h1>
-          <p className="text-gray-400 mb-4">How's your {getCurrentDay()}? 👋</p>
+          <p className="text-gray-400 mb-4">
+            {isClient ? `How's your ${currentDay}?` : "How's your day?"} 👋
+          </p>
 
           <p className="text-gray-300 leading-relaxed mb-6 max-w-2xl">{bio}</p>
 

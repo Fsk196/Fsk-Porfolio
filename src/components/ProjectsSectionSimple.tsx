@@ -76,7 +76,6 @@ const ProjectsSection = ({ projects, isOnly2 }: ProjectsSectionProps) => {
                                 <Image
                                   src={project.image}
                                   alt={project.title}
-                                  layout="responsive"
                                   width={500}
                                   height={300}
                                 />
@@ -195,7 +194,6 @@ const ProjectsSection = ({ projects, isOnly2 }: ProjectsSectionProps) => {
                                 <Image
                                   src={project.image}
                                   alt={project.title}
-                                  layout="responsive"
                                   width={500}
                                   height={300}
                                 />

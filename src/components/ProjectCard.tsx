@@ -18,7 +18,6 @@ const ProjectCard = () => {
           <Image
             src="/canvas.png"
             alt="Project Image"
-            layout="fill"
             className="object-cover w-full h-full z-0"
             //   priority={index === 0}
           />

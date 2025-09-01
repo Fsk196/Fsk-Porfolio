@@ -91,7 +91,6 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                   <Image
                     src={project.image}
                     alt={project.title}
-                    layout="responsive"
                     width={500}
                     height={300}
                   />
