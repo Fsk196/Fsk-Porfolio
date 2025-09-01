@@ -1,12 +1,10 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { FaGithub } from "react-icons/fa";
 import { GrShare } from "react-icons/gr";
-import { useState } from "react";
 import { CgDetailsMore } from "react-icons/cg";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -30,7 +28,6 @@ interface ProjectsSectionProps {
 
 const ProjectsSection = ({ projects, isOnly2 }: ProjectsSectionProps) => {
   const featuredProjects = projects.filter((p) => p.featured);
-  const otherProjects = projects.filter((p) => !p.featured);
 
   const onlyShow2Projects = featuredProjects.slice(0, 2);
 

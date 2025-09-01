@@ -111,13 +111,16 @@ Reply directly to this email to respond to ${formData.name}.
       } else {
         throw new Error(data.message || "Failed to send message");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error sending email:", error);
 
       // Dismiss loading toast and show error
       toast.dismiss(loadingToast);
 
-      if (error.message?.includes("access_key")) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+
+      if (errorMessage.includes("access_key")) {
         toast.error("Configuration Error", {
           description:
             "Contact form not configured properly. Using fallback method.",
@@ -125,7 +128,7 @@ Reply directly to this email to respond to ${formData.name}.
         });
       } else {
         toast.error("Message Failed", {
-          description: "Couldn't send message. Opening email client...",
+          description: "Couldn&apos;t send message. Opening email client...",
           duration: 4000,
         });
       }
@@ -164,9 +167,9 @@ Reply directly to this email to respond to ${formData.name}.
       <Card className="bg-gray-900/50 border-gray-800">
         <CardContent className="p-6">
           <p className="text-gray-300 text-sm mb-6">
-            Have a project in mind or just want to say hello? I'd love to hear
-            from you. Drop me a message and I'll get back to you as soon as
-            possible.
+            Have a project in mind or just want to say hello? I&apos;d love to
+            hear from you. Drop me a message and I&apos;ll get back to you as
+            soon as possible.
           </p>
 
           {isSubmitted ? (
@@ -175,7 +178,7 @@ Reply directly to this email to respond to ${formData.name}.
                 ✅ Message Sent Successfully!
               </div>
               <p className="text-gray-400 text-sm">
-                Thank you for reaching out. I'll get back to you soon.
+                Thank you for reaching out. I&apos;ll get back to you soon.
               </p>
             </div>
           ) : (

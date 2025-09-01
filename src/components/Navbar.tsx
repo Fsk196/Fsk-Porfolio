@@ -1,4 +1,3 @@
-import ThemeSwitcher from "./ThemeSwitcher";
 import { Button } from "./ui/button";
 import { MdOutlineFileDownload } from "react-icons/md";
 import { PiDevicesDuotone } from "react-icons/pi";

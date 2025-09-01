@@ -1,11 +1,8 @@
-import Navbar from "@/components/Navbar";
 import ProfileSection from "@/components/ProfileSection";
 import ProjectsSection from "@/components/ProjectsSectionSimple";
-import HighlightsSection from "@/components/HighlightsSection";
 import TechStackSection from "@/components/TechStackSection";
 import NewsletterSection from "@/components/NewsletterSection";
 import FooterSection from "@/components/FooterSection";
-import ProjectCard from "@/components/ProjectCard";
 import { PROJECTS as projects } from "@/content";
 import {
   FrontendWebStack,
