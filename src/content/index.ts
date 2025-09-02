@@ -1,10 +1,38 @@
 export const PROJECTS = [
   {
+    id: "dealership-app",
+    title: "Dealership Management App",
+    description:
+      "A Mobile Application for managing vehicle inventory, sales, customer and Employee interactions. A mobile app with Expo React Native with AI Chat bot integration for assisting users with vehicle information and recommendations.",
+    image: [
+      "/dealership-home.jpg",
+      "/dealership-emp.jpg",
+      "/dealership-emp-detail.jpg",
+      "/dealership-sales.jpg",
+      "/dealership-profile.jpg",
+    ],
+    technologies: [
+      "React Native",
+      "Expo",
+      "Nativewind",
+      "Reanimated",
+      "React Native Chart Kit",
+      "Redux",
+    ],
+    githubUrl: "https://github.com/Fsk196/noteLense-Frontend",
+    privateGit: true,
+    liveUrl: "NONE",
+    featured: true,
+    company: "Dealership Fsk.",
+    period: "2025",
+    isMobile: true,
+  },
+  {
     id: "notelense-app",
     title: "NoteLense",
     description:
       "In Notelense, when a user uploads a PDF, the file is first parsed and its text is extracted. The extracted text is then chunked into smaller, meaningful sections so context can be preserved. Each chunk is passed through an embedding model  Gemini embeddings to convert the text into numerical vectors. These vectors, along with metadata (such as page number, document ID, and session UUID), are stored in Pinecone, which acts as our vector database. During a chat, when the user asks a question, I embed the query, perform a semantic similarity search in Pinecone to fetch the most relevant chunks, and then feed those chunks along with the query into the LLM to generate a contextual, natural language response. This flow makes Notelense work like a personal research assistant, retrieving accurate information from PDFs on demand.",
-    image: "/notelense-chat.png",
+    image: ["/notelense-chat.png"],
     technologies: [
       "React",
       "Vite",
@@ -27,13 +55,14 @@ export const PROJECTS = [
     featured: true,
     company: "NoteLense Fsk.",
     period: "2025",
+    isMobile: false,
   },
   {
     id: "midnight-musing",
     title: "Midnight Musing",
     description:
       "A Web app for user to post their midnight thoughts. While also providing a platform for others to share their reflections. Creating, Updating and Deleting posts. Also user can like, share, comments and save the favorite posts.",
-    image: "/midnight-musing.png",
+    image: ["/midnight-musing.png"],
     technologies: [
       "NextJS",
       "TailwindCSS",
@@ -51,6 +80,7 @@ export const PROJECTS = [
     featured: true,
     company: "MidnightMusing Fsk.",
     period: "2025",
+    isMobile: false,
   },
   //   {
   //     id: "fit-track-app",
@@ -77,8 +107,8 @@ export const PROJECTS = [
     id: "wiki-reader",
     title: "Wiki Reader",
     description:
-      "A mobile application for reading and annotating Wikipedia articles In more User Friendly UI. with Dark and Light mode support also user can adjust the font sizes, Font Family and even line heights. with a side that helps users to browse those articles topic wise easily.",
-    image: "/wiki-reader.png",
+      "A Web application for reading and annotating Wikipedia articles In more User Friendly UI. with Dark and Light mode support also user can adjust the font sizes, Font Family and even line heights. with a side that helps users to browse those articles topic wise easily.",
+    image: ["/wiki-reader.png"],
     technologies: ["React", "TailwindCSS", "TypeScript", "Vite", "ShadCN UI"],
     githubUrl: "https://github.com/Fsk196/Wiki-Reader",
     liveUrl: "https://wikireader.netlify.app/",

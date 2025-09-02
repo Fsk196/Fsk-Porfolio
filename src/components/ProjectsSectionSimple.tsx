@@ -3,10 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { GrShare } from "react-icons/gr";
 import { CgDetailsMore } from "react-icons/cg";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { useState } from "react";
 
 interface Project {
   id: string;
@@ -18,7 +19,10 @@ interface Project {
   period?: string;
   githubUrl?: string;
   liveUrl?: string;
-  image?: string;
+  image?: string | string[]; // Support both single string and array
+  images?: string[]; // Add support for multiple images
+  privateGit?: boolean; // Add support for privateGit property
+  isMobile?: boolean; // Add support for mobile app indicator
 }
 
 interface ProjectsSectionProps {
@@ -28,8 +32,249 @@ interface ProjectsSectionProps {
 
 const ProjectsSection = ({ projects, isOnly2 }: ProjectsSectionProps) => {
   const featuredProjects = projects.filter((p) => p.featured);
-
   const onlyShow2Projects = featuredProjects.slice(0, 2);
+  const [currentImageIndex, setCurrentImageIndex] = useState<{
+    [key: string]: number;
+  }>({});
+
+  // Initialize image index for each project
+  const initializeImageIndex = (projectId: string) => {
+    if (!(projectId in currentImageIndex)) {
+      setCurrentImageIndex((prev) => ({ ...prev, [projectId]: 0 }));
+    }
+  };
+
+  const nextImage = (projectId: string, project: Project) => {
+    const images = project.images || (project.image ? [project.image] : []);
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) => ({
+        ...prev,
+        [projectId]: (prev[projectId] + 1) % images.length,
+      }));
+    }
+  };
+
+  const prevImage = (projectId: string, project: Project) => {
+    const images = project.images || (project.image ? [project.image] : []);
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) => ({
+        ...prev,
+        [projectId]:
+          prev[projectId] === 0 ? images.length - 1 : prev[projectId] - 1,
+      }));
+    }
+  };
+
+  const renderProjectImage = (
+    project: Project,
+    isSimpleView: boolean = false
+  ) => {
+    // Handle different image formats from the content file
+    let images: string[] = [];
+
+    if (project.images) {
+      // Use images array if available
+      images = project.images;
+    } else if (project.image) {
+      // Handle both string and string[] for image property
+      if (Array.isArray(project.image)) {
+        images = project.image.filter((img) => img && img.trim() !== ""); // Filter out empty strings
+      } else {
+        images = [project.image];
+      }
+    }
+
+    if (images.length === 0) return null;
+
+    // For simple view (onlyShow2projects), show only the first image
+    if (isSimpleView) {
+      if (project.isMobile) {
+        // Mobile app image without phone frame
+        return (
+          <div className="h-96 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/20" />
+            <div className="relative max-w-full max-h-full p-8">
+              <Image
+                src={images[0]}
+                alt={project.title}
+                width={300}
+                height={400}
+                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+              />
+            </div>
+          </div>
+        );
+      } else {
+        // Web browser frame (existing code)
+        return (
+          <div className="h-96 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative">
+            <div className="absolute inset-0 bg-black/20" />
+            <div className="absolute top-4 left-8 right-8">
+              <div className="bg-gray-900/90 rounded-lg">
+                <div className="flex items-center gap-2 p-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <div className="bg-gray-800 rounded text-center px-1 pb-1">
+                  <Image
+                    src={images[0]}
+                    alt={project.title}
+                    width={500}
+                    height={300}
+                    className="rounded"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    }
+
+    // For full view (all featured projects), show swipeable gallery
+    initializeImageIndex(project.id);
+    const currentIndex = currentImageIndex[project.id] || 0;
+
+    if (project.isMobile) {
+      // Mobile app image without phone frame with swipe functionality
+      return (
+        <div className="h-96 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative group flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="relative max-w-full max-h-full p-8">
+            <Image
+              src={images[currentIndex]}
+              alt={`${project.title} - Image ${currentIndex + 1}`}
+              width={300}
+              height={400}
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-opacity duration-300"
+            />
+
+            {/* Navigation arrows for mobile - only show if multiple images */}
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    prevImage(project.id, project);
+                  }}
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                >
+                  <FaChevronLeft size={16} />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    nextImage(project.id, project);
+                  }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                >
+                  <FaChevronRight size={16} />
+                </button>
+              </>
+            )}
+
+            {/* Image indicators for mobile */}
+            {images.length > 1 && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setCurrentImageIndex((prev) => ({
+                        ...prev,
+                        [project.id]: index,
+                      }));
+                    }}
+                    className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                      index === currentIndex ? "bg-white" : "bg-white/50"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // Web browser frame with swipe functionality
+    return (
+      <div className="h-96 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative group">
+        <div className="absolute inset-0 bg-black/20" />
+        <div className="absolute top-4 left-8 right-8">
+          <div className="bg-gray-900/90 rounded-lg">
+            <div className="flex items-center gap-2 p-2">
+              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+            </div>
+            <div className="bg-gray-800 rounded text-center px-1 pb-1 relative">
+              <Image
+                src={images[currentIndex]}
+                alt={`${project.title} - Image ${currentIndex + 1}`}
+                width={500}
+                height={300}
+                className="rounded transition-opacity duration-300"
+              />
+
+              {/* Navigation arrows - only show if multiple images */}
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      prevImage(project.id, project);
+                    }}
+                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  >
+                    <FaChevronLeft size={16} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      nextImage(project.id, project);
+                    }}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  >
+                    <FaChevronRight size={16} />
+                  </button>
+                </>
+              )}
+
+              {/* Image indicators */}
+              {images.length > 1 && (
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+                  {images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setCurrentImageIndex((prev) => ({
+                          ...prev,
+                          [project.id]: index,
+                        }));
+                      }}
+                      className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                        index === currentIndex ? "bg-white" : "bg-white/50"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <section className="mb-16">
@@ -59,31 +304,7 @@ const ProjectsSection = ({ projects, isOnly2 }: ProjectsSectionProps) => {
                     className="bg-gray-900/50 border-gray-800 overflow-hidden py-0"
                   >
                     <div className="h-64 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative overflow-hidden">
-                      {project?.image && (
-                        <div className="h-96 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative">
-                          <div className="absolute inset-0 bg-black/20" />
-                          <div className="absolute top-4 left-8 right-8">
-                            <div className="bg-gray-900/90 rounded-lg">
-                              <div className="flex items-center gap-2 p-2">
-                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                              </div>
-                              <div className="bg-gray-800 rounded text-center px-1 pb-1">
-                                {/* <h2 className="text-white text-2xl font-bold">
-                                          {project.title}
-                                        </h2> */}
-                                <Image
-                                  src={project.image}
-                                  alt={project.title}
-                                  width={500}
-                                  height={300}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                      {project?.image && renderProjectImage(project, true)}
 
                       <div className="absolute right-2 top-2 z-20">
                         <Link
@@ -177,31 +398,8 @@ const ProjectsSection = ({ projects, isOnly2 }: ProjectsSectionProps) => {
                     className="bg-gray-900/50 border-gray-800 overflow-hidden py-0"
                   >
                     <div className="h-64 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative overflow-hidden">
-                      {project?.image && (
-                        <div className="h-96 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative">
-                          <div className="absolute inset-0 bg-black/20" />
-                          <div className="absolute top-4 left-8 right-8">
-                            <div className="bg-gray-900/90 rounded-lg">
-                              <div className="flex items-center gap-2 p-2">
-                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                                <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                              </div>
-                              <div className="bg-gray-800 rounded text-center px-1 pb-1">
-                                {/* <h2 className="text-white text-2xl font-bold">
-                                            {project.title}
-                                          </h2> */}
-                                <Image
-                                  src={project.image}
-                                  alt={project.title}
-                                  width={500}
-                                  height={300}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                      {(project?.image || project?.images) &&
+                        renderProjectImage(project, false)}
 
                       <div className="absolute right-2 top-2 z-20">
                         <Link

@@ -1,11 +1,14 @@
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PROJECTS as projectsData } from "@/content";
 import Image from "next/image";
+import { useState } from "react";
 
 // This would normally come from a database or API
 
@@ -17,10 +20,39 @@ interface ProjectPageProps {
 
 export default function ProjectPage({ params }: ProjectPageProps) {
   const project = projectsData.find((p) => p.id === params.id);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   if (!project) {
     notFound();
   }
+
+  // Get images array from project
+  const getProjectImages = () => {
+    if (project.image) {
+      if (Array.isArray(project.image)) {
+        return project.image.filter((img) => img && img.trim() !== "");
+      } else {
+        return [project.image];
+      }
+    }
+    return [];
+  };
+
+  const images = getProjectImages();
+
+  const nextImage = () => {
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (images.length > 1) {
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? images.length - 1 : prev - 1
+      );
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black">
@@ -75,30 +107,150 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
         {/* Project Hero Image */}
         <Card className="bg-gray-900/50 py-0 border-gray-800 overflow-hidden mb-8">
-          <div className="h-96 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative">
-            <div className="absolute inset-0 bg-black/20" />
-            <div className="absolute top-4 left-8 right-8">
-              <div className="bg-gray-900/90 rounded-lg">
-                <div className="flex items-center gap-2 p-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                </div>
-                <div className="bg-gray-800 rounded text-center px-1 pb-1">
-                  {/* <h2 className="text-white text-2xl font-bold">
-                    {project.title}
-                  </h2> */}
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    width={500}
-                    height={300}
-                  />
+          {project.isMobile ? (
+            // Mobile app image without phone frame with swipe functionality
+            <div className="min-h-[500px] bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative flex items-center justify-center group py-8">
+              <div className="absolute inset-0 bg-black/20" />
+              <div className="relative w-full h-full flex items-center justify-center px-8">
+                <Image
+                  src={images[currentImageIndex]}
+                  alt={`${project.title} - Image ${currentImageIndex + 1}`}
+                  width={300}
+                  height={600}
+                  className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-opacity duration-300"
+                />
+
+                {/* Navigation arrows for mobile - only show if multiple images */}
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-200 z-10"
+                    >
+                      <FaChevronLeft size={20} />
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-200 z-10"
+                    >
+                      <FaChevronRight size={20} />
+                    </button>
+                  </>
+                )}
+
+                {/* Image indicators for mobile */}
+                {images.length > 1 && (
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                    {images.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-3 h-3 rounded-full transition-colors duration-200 ${
+                          index === currentImageIndex
+                            ? "bg-white"
+                            : "bg-white/50"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            // Web browser frame with swipe functionality
+            <div className="h-96 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 relative group">
+              <div className="absolute inset-0 bg-black/20" />
+              <div className="absolute top-4 left-8 right-8">
+                <div className="bg-gray-900/90 rounded-lg">
+                  <div className="flex items-center gap-2 p-2">
+                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  </div>
+                  <div className="bg-gray-800 rounded text-center px-1 pb-1 relative">
+                    <Image
+                      src={images[currentImageIndex]}
+                      alt={`${project.title} - Image ${currentImageIndex + 1}`}
+                      width={500}
+                      height={300}
+                      className="rounded transition-opacity duration-300"
+                    />
+
+                    {/* Navigation arrows for web - only show if multiple images */}
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          onClick={prevImage}
+                          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        >
+                          <FaChevronLeft size={16} />
+                        </button>
+                        <button
+                          onClick={nextImage}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                        >
+                          <FaChevronRight size={16} />
+                        </button>
+                      </>
+                    )}
+
+                    {/* Image indicators for web */}
+                    {images.length > 1 && (
+                      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+                        {images.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentImageIndex(index)}
+                            className={`w-2 h-2 rounded-full transition-colors duration-200 ${
+                              index === currentImageIndex
+                                ? "bg-white"
+                                : "bg-white/50"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </Card>
+
+        {/* Thumbnail Gallery - only show if multiple images */}
+        {/* {images.length > 1 && (
+          <Card className="bg-gray-900/50 border-gray-800 mb-8">
+            <CardContent className="p-4">
+              <h3 className="text-lg font-semibold text-white mb-4">
+                Project Screenshots
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                      index === currentImageIndex
+                        ? "border-blue-500 ring-2 ring-blue-500/50"
+                        : "border-gray-600 hover:border-gray-400"
+                    }`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${project.title} - Screenshot ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors duration-200" />
+                    {index === currentImageIndex && (
+                      <div className="absolute inset-0 bg-blue-500/20" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )} */}
 
         {/* Project Details */}
         <div className="grid gap-8 md:grid-cols-3">
