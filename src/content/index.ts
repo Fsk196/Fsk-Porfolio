@@ -19,7 +19,7 @@ export const PROJECTS = [
       "React Native Chart Kit",
       "Redux",
     ],
-    githubUrl: "https://github.com/Fsk196/noteLense-Frontend",
+    githubUrl: "https://github.com/Fsk196/fittrack",
     privateGit: true,
     liveUrl: "NONE",
     featured: true,
