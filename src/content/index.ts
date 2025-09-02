@@ -28,6 +28,36 @@ export const PROJECTS = [
     isMobile: true,
   },
   {
+    id: "fittrack-app",
+    title: "Fit Track",
+    description:
+      "A fitness tracking application built with React Native Expo and Node.js. NeonDB (POSTGRESQL) for Database. User can track their workouts, monitor progress, and set fitness goals.  Add friends. Compete with others. and participate in challenges.",
+    image: [
+      "/fittrack-home.jpg",
+      "/fittrack-exercise.jpg",
+      "/fittrack-exer-detail.jpg",
+      "/fittrack-freinds.jpg",
+      "/fittrack-profile.jpg",
+      "/fittrack-add-friend.jpg",
+      "/fittrack-acheivement.jpg",
+    ],
+    technologies: [
+      "React Native",
+      "Expo",
+      "Nativewind",
+      "Reanimated",
+      "React Native Chart Kit",
+      "Redux",
+    ],
+    githubUrl: "https://github.com/Fsk196/fittrack",
+    privateGit: true,
+    liveUrl: "NONE",
+    featured: true,
+    company: "Dealership Fsk.",
+    period: "2025",
+    isMobile: true,
+  },
+  {
     id: "notelense-app",
     title: "NoteLense",
     description:

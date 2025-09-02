@@ -140,7 +140,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
                 {/* Image indicators for mobile */}
                 {images.length > 1 && (
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                  <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
                     {images.map((_, index) => (
                       <button
                         key={index}
