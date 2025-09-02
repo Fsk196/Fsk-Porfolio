@@ -19,7 +19,7 @@ export const PROJECTS = [
       "React Native Chart Kit",
       "Redux",
     ],
-    githubUrl: "https://github.com/Fsk196/fittrack",
+    githubUrl: "https://github.com/Fsk196/dealerpaasmob",
     privateGit: true,
     liveUrl: "NONE",
     featured: true,
