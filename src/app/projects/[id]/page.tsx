@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import { PROJECTS as projectsData } from "@/content";
 import Image from "next/image";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 // This would normally come from a database or API
 
@@ -217,41 +218,6 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           )}
         </Card>
 
-        {/* Thumbnail Gallery - only show if multiple images */}
-        {/* {images.length > 1 && (
-          <Card className="bg-gray-900/50 border-gray-800 mb-8">
-            <CardContent className="p-4">
-              <h3 className="text-lg font-semibold text-white mb-4">
-                Project Screenshots
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all duration-200 ${
-                      index === currentImageIndex
-                        ? "border-blue-500 ring-2 ring-blue-500/50"
-                        : "border-gray-600 hover:border-gray-400"
-                    }`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${project.title} - Screenshot ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors duration-200" />
-                    {index === currentImageIndex && (
-                      <div className="absolute inset-0 bg-blue-500/20" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )} */}
-
         {/* Project Details */}
         <div className="grid gap-8 md:grid-cols-3">
           <div className="md:col-span-2">
@@ -260,9 +226,81 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 <h3 className="text-xl font-semibold text-white mb-4">
                   Project Overview
                 </h3>
-                <p className="text-gray-300 leading-relaxed">
-                  {project.description}
-                </p>
+                <div className="text-gray-300 leading-relaxed prose prose-invert prose-gray max-w-none">
+                  <ReactMarkdown
+                    components={{
+                      // Custom styling for markdown elements
+                      h1: ({ children }) => (
+                        <h1 className="text-2xl font-bold text-white mb-4">
+                          {children}
+                        </h1>
+                      ),
+                      h2: ({ children }) => (
+                        <h2 className="text-xl font-semibold text-white mb-3">
+                          {children}
+                        </h2>
+                      ),
+                      h3: ({ children }) => (
+                        <h3 className="text-lg font-medium text-white mb-2">
+                          {children}
+                        </h3>
+                      ),
+                      p: ({ children }) => (
+                        <p className="text-gray-300 mb-4 leading-relaxed">
+                          {children}
+                        </p>
+                      ),
+                      strong: ({ children }) => (
+                        <strong className="text-white font-semibold">
+                          {children}
+                        </strong>
+                      ),
+                      em: ({ children }) => (
+                        <em className="text-blue-300 italic">{children}</em>
+                      ),
+                      ul: ({ children }) => (
+                        <ul className="list-disc list-inside text-gray-300 mb-4 space-y-1">
+                          {children}
+                        </ul>
+                      ),
+                      ol: ({ children }) => (
+                        <ol className="list-decimal list-inside text-gray-300 mb-4 space-y-1">
+                          {children}
+                        </ol>
+                      ),
+                      li: ({ children }) => (
+                        <li className="text-gray-300">{children}</li>
+                      ),
+                      code: ({ children }) => (
+                        <code className="bg-gray-800 text-blue-300 px-2 py-1 rounded text-sm font-mono">
+                          {children}
+                        </code>
+                      ),
+                      pre: ({ children }) => (
+                        <pre className="bg-gray-800 text-blue-300 p-4 rounded-lg overflow-x-auto mb-4">
+                          {children}
+                        </pre>
+                      ),
+                      blockquote: ({ children }) => (
+                        <blockquote className="border-l-4 border-blue-500 pl-4 italic text-gray-400 mb-4">
+                          {children}
+                        </blockquote>
+                      ),
+                      a: ({ href, children }) => (
+                        <a
+                          href={href}
+                          className="text-blue-400 hover:text-blue-300 underline transition-colors"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {children}
+                        </a>
+                      ),
+                    }}
+                  >
+                    {project.description}
+                  </ReactMarkdown>
+                </div>
               </CardContent>
             </Card>
 

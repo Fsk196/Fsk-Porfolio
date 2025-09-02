@@ -30,8 +30,15 @@ export const PROJECTS = [
   {
     id: "fittrack-app",
     title: "Fit Track",
-    description:
-      "A fitness tracking application built with React Native Expo and Node.js. NeonDB (POSTGRESQL) for Database. User can track their workouts, monitor progress, and set fitness goals.  Add friends. Compete with others. and participate in challenges.",
+    description: `**Fittrack** is a comprehensive fitness tracking mobile application built with React Native that serves as a complete fitness companion for users looking to monitor their health and wellness journey. The app provides a holistic approach to fitness tracking by combining exercise discovery, progress monitoring, social challenges, and personalized user experiences into one seamless platform.
+
+The application features a sophisticated **exercise database** where users can explore and search through various workout routines categorized by muscle groups including Biceps, Triceps, Shoulders, Chest, Back, and Legs. Users can filter exercises based on their preferences and fitness goals, making it easy to discover new workouts or find specific exercises for targeted training sessions.
+
+**FitTrack** emphasizes **user engagement and motivation** through its comprehensive dashboard that displays daily progress metrics including steps taken, calories burned, workout duration, and streak tracking. The app gamifies the fitness experience by incorporating achievement systems, social challenges, and progress visualization that keeps users motivated and accountable to their fitness goals.
+
+The **social aspect** of the app is particularly strong, featuring community challenges where users can participate in fitness competitions like "30-Day Push-up Challenge" or "Monthly Step Challenge." Users can view their achievements, track their participation in various challenges, and see how they rank among other participants, fostering a sense of community and healthy competition.
+
+**Personalization** is at the core of FitTrack's user experience. Each user has a detailed profile system that stores their fitness goals, tracks their achievements, and provides personalized fitness tips. The app includes features like QR code sharing for easy profile sharing, friend connections, and customizable user avatars, making the fitness journey more social and engaging.`,
     image: [
       "/fittrack-home.jpg",
       "/fittrack-exercise.jpg",
@@ -43,17 +50,26 @@ export const PROJECTS = [
     ],
     technologies: [
       "React Native",
+      "React",
       "Expo",
       "Nativewind",
       "Reanimated",
       "React Native Chart Kit",
       "Redux",
+      "Appwrite",
+      "Expo Camera",
+      "NeonDB",
+      "Expo Router",
+      "Expo Linear Gradient",
+      "Redux Toolkit",
+      "React Native Safe Area Context",
+      "React Native Appwrite",
     ],
     githubUrl: "https://github.com/Fsk196/fittrack",
     privateGit: true,
     liveUrl: "NONE",
     featured: true,
-    company: "Dealership Fsk.",
+    company: "Fit Track Fsk.",
     period: "2025",
     isMobile: true,
   },

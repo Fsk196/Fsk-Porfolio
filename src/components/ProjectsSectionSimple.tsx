@@ -8,6 +8,7 @@ import { GrShare } from "react-icons/gr";
 import { CgDetailsMore } from "react-icons/cg";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 interface Project {
   id: string;
@@ -323,9 +324,83 @@ const ProjectsSection = ({ projects, isOnly2 }: ProjectsSectionProps) => {
                     </div>
 
                     <CardContent className="pb-6">
-                      <p className="text-gray-300 mb-4">
-                        {project.description.slice(0, 150)}...
-                      </p>
+                      <div className="text-gray-300 mb-4">
+                        <ReactMarkdown
+                          components={{
+                            // Custom styling for markdown elements
+                            h1: ({ children }) => (
+                              <h1 className="text-2xl font-bold text-white mb-4">
+                                {children}
+                              </h1>
+                            ),
+                            h2: ({ children }) => (
+                              <h2 className="text-xl font-semibold text-white mb-3">
+                                {children}
+                              </h2>
+                            ),
+                            h3: ({ children }) => (
+                              <h3 className="text-lg font-medium text-white mb-2">
+                                {children}
+                              </h3>
+                            ),
+                            p: ({ children }) => (
+                              <p className="text-gray-300 mb-2 leading-relaxed">
+                                {children}
+                              </p>
+                            ),
+                            strong: ({ children }) => (
+                              <strong className="text-white font-semibold">
+                                {children}
+                              </strong>
+                            ),
+                            em: ({ children }) => (
+                              <em className="text-blue-300 italic">
+                                {children}
+                              </em>
+                            ),
+                            ul: ({ children }) => (
+                              <ul className="list-disc list-inside text-gray-300 mb-2 space-y-1">
+                                {children}
+                              </ul>
+                            ),
+                            ol: ({ children }) => (
+                              <ol className="list-decimal list-inside text-gray-300 mb-2 space-y-1">
+                                {children}
+                              </ol>
+                            ),
+                            li: ({ children }) => (
+                              <li className="text-gray-300">{children}</li>
+                            ),
+                            code: ({ children }) => (
+                              <code className="bg-gray-800 text-blue-300 px-1 py-0.5 rounded text-sm font-mono">
+                                {children}
+                              </code>
+                            ),
+                            pre: ({ children }) => (
+                              <pre className="bg-gray-800 text-blue-300 p-2 rounded-lg overflow-x-auto mb-2">
+                                {children}
+                              </pre>
+                            ),
+                            blockquote: ({ children }) => (
+                              <blockquote className="border-l-4 border-blue-500 pl-2 italic text-gray-400 mb-2">
+                                {children}
+                              </blockquote>
+                            ),
+                            a: ({ href, children }) => (
+                              <a
+                                href={href}
+                                className="text-blue-400 hover:text-blue-300 underline transition-colors"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {children}
+                              </a>
+                            ),
+                          }}
+                        >
+                          {project.description.substring(0, 150) + "..."}
+                        </ReactMarkdown>
+                      </div>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {project.technologies.map((tech, techIndex) => (
                           <Badge
@@ -418,9 +493,83 @@ const ProjectsSection = ({ projects, isOnly2 }: ProjectsSectionProps) => {
                     </div>
 
                     <CardContent className="pb-6">
-                      <p className="text-gray-300 mb-4">
-                        {project.description.slice(0, 150)}...
-                      </p>
+                      <div className="text-gray-300 mb-4">
+                        <ReactMarkdown
+                          components={{
+                            // Custom styling for markdown elements
+                            h1: ({ children }) => (
+                              <h1 className="text-2xl font-bold text-white mb-4">
+                                {children}
+                              </h1>
+                            ),
+                            h2: ({ children }) => (
+                              <h2 className="text-xl font-semibold text-white mb-3">
+                                {children}
+                              </h2>
+                            ),
+                            h3: ({ children }) => (
+                              <h3 className="text-lg font-medium text-white mb-2">
+                                {children}
+                              </h3>
+                            ),
+                            p: ({ children }) => (
+                              <p className="text-gray-300 mb-2 leading-relaxed">
+                                {children}
+                              </p>
+                            ),
+                            strong: ({ children }) => (
+                              <strong className="text-white font-semibold">
+                                {children}
+                              </strong>
+                            ),
+                            em: ({ children }) => (
+                              <em className="text-blue-300 italic">
+                                {children}
+                              </em>
+                            ),
+                            ul: ({ children }) => (
+                              <ul className="list-disc list-inside text-gray-300 mb-2 space-y-1">
+                                {children}
+                              </ul>
+                            ),
+                            ol: ({ children }) => (
+                              <ol className="list-decimal list-inside text-gray-300 mb-2 space-y-1">
+                                {children}
+                              </ol>
+                            ),
+                            li: ({ children }) => (
+                              <li className="text-gray-300">{children}</li>
+                            ),
+                            code: ({ children }) => (
+                              <code className="bg-gray-800 text-blue-300 px-1 py-0.5 rounded text-sm font-mono">
+                                {children}
+                              </code>
+                            ),
+                            pre: ({ children }) => (
+                              <pre className="bg-gray-800 text-blue-300 p-2 rounded-lg overflow-x-auto mb-2">
+                                {children}
+                              </pre>
+                            ),
+                            blockquote: ({ children }) => (
+                              <blockquote className="border-l-4 border-blue-500 pl-2 italic text-gray-400 mb-2">
+                                {children}
+                              </blockquote>
+                            ),
+                            a: ({ href, children }) => (
+                              <a
+                                href={href}
+                                className="text-blue-400 hover:text-blue-300 underline transition-colors"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {children}
+                              </a>
+                            ),
+                          }}
+                        >
+                          {project.description.substring(0, 150) + "..."}
+                        </ReactMarkdown>
+                      </div>
                       <div className="flex flex-wrap gap-2 mb-4">
                         {project.technologies.map((tech, techIndex) => (
                           <Badge
