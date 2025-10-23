@@ -150,7 +150,7 @@ const TechStackSection = ({ techStacks, title }: TechStackSectionProps) => {
             onMouseEnter={() => setHoveredIndex(index)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
-            <CardContent className="p-4">
+            <CardContent className="px-4 ">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-gray-700/50 transition-colors duration-300 text-xl">
                   {getIcon(stack.category)}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+// @ts-ignore - allow importing global CSS in Next.js app directory
 import "./globals.css";
 import ThemeProviderWrapper from "@/components/ThemeProviderWrapper";
 import { Toaster } from "@/components/ui/sonner";

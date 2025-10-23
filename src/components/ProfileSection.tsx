@@ -86,7 +86,7 @@ const ProfileSection = ({ name, bio, avatar }: ProfileSectionProps) => {
       </div>
 
       {/* Company logos placeholder */}
-      <div className="flex items-center gap-8 opacity-50">
+      <div className="flex items-center gap-8">
         <div className="text-white text-sm">Previous Companies:</div>
         <div className="flex gap-6 items-center">
           <Link
