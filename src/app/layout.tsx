@@ -12,6 +12,9 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Fsk",
   description: "Fsk Portfolio",
+  verification: {
+    google: "rbbAxT10eImjfAg_KgCkN2bBN0RaF_eFksezIivTPgk",
+  },
 };
 
 export default function RootLayout({
